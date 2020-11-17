@@ -34,7 +34,7 @@ o......o.....o.........o...
 ..o....o.o..............o..
 ```
 
-To visualize the map replacing `.` with `x` for the biggest square of the map (first top left if many):
+To visualize the map replacing `.` with `x` for the biggest square of the map (first top left if many):
 
 ```
 $ python find_square.py map_file
