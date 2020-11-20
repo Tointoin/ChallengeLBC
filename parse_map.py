@@ -31,6 +31,10 @@ def _parse_first_line(f):
         i+=1
         c = first_line[i]
     line_num = int(line_num)
+    if not line_num:
+        raise MapError("a map must have at least one line")
+    if len(first_line[i:]) != 4:
+        raise MapError("map first line does not have a valid number of characters")
     empty = c
     obstacle = first_line[i+1]
     full = first_line[i+2]
@@ -51,7 +55,7 @@ def _parse_line(string, empty, obstacle):
         elif c == obstacle:
             line.append(True)
         else:
-            raise MapError("char is not neither an empty or an obstacle char")
+            raise MapError(f"char '{c}' is neither an empty nor an obstacle char")
     return line
 
 
@@ -71,6 +75,8 @@ def _parse_matrix(line_num, empty, obstacle, f):
     M = []
     first_line = f.readline()[:-1] # remove '\n' char at end of line
     line_len = len(first_line)
+    if not line_len:
+        raise MapError("map lines have at least a lentgh of one")
     M.append(_parse_line(first_line, empty, obstacle))
     for _ in range (1, line_num):
         line = f.readline()[:-1] # remove '\n' char at end of line
