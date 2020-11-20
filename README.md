@@ -12,7 +12,7 @@ To generate an `example_file` with a map of:
 * density of 1
 
 ```
-$ python map_gen.py 27 9 1 > map_file
+$ python map_gen.py 27 9 1 > example_file
 ```
 
 ## Map Visualization
@@ -20,7 +20,7 @@ $ python map_gen.py 27 9 1 > map_file
 To visualize its content (notice that first line indicates information about the map):
 
 ```
-$ cat map_file
+$ cat example_file
 9.ox
 .....o.....................
 o......o.....o.........o...
