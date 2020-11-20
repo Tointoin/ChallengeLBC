@@ -33,7 +33,7 @@ def _parse_first_line(f):
     obstacle = first_line[i+1]
     full = first_line[i+2]
     if first_line[i+3] != "\n":
-        raise MapError
+        raise MapError("map has more lines that indicated on file's first line")
     return f, line_num, empty, obstacle, full
 
 
@@ -45,11 +45,11 @@ def _parse_line(string, empty, obstacle):
     line = []
     for c in string:
         if c == empty:
-            line.append(True)
-        elif c == obstacle:
             line.append(False)
+        elif c == obstacle:
+            line.append(True)
         else:
-            raise MapError
+            raise MapError("char is not neither an empty or an obstacle char")
     return line
 
 
@@ -67,17 +67,17 @@ def _parse_matrix(line_num, empty, obstacle, f):
     M -- boolean matrix of empty (True) and obstacle (False) chars in map
     """ 
     M = []
-    first_line = f.readline()
+    first_line = f.readline()[:-1] # remove '\n' char at end of line
     line_len = len(first_line)
-    M.append(_parse_line(first_line[:-1], empty, obstacle))
+    M.append(_parse_line(first_line, empty, obstacle))
     for _ in range (1, line_num):
-        line = f.readline()
+        line = f.readline()[:-1] # remove '\n' char at end of line
         if len(line) != line_len:
-            raise MapError
-        M.append(_parse_line(line[:-1], empty, obstacle))
+            raise MapError("map lines does not all have the same length")
+        M.append(_parse_line(line, empty, obstacle))
     if f.read(1):
-        raise MapError
-    return M
+        raise MapError("map has more lines that indicated in first line of the file")
+    return M, line_len
 
 
 def parse_map(path):
@@ -92,11 +92,12 @@ def parse_map(path):
     """
     f = open(path, "r")
     f, line_num, empty, obstacle, full = _parse_first_line(f)
-    M = _parse_matrix(line_num, empty, obstacle, f)
+    M, line_len = _parse_matrix(line_num, empty, obstacle, f)
     return {
+        "line_len": line_len,
         "line_num": line_num,
         "empty_char": empty,
         "obstacle_char": obstacle,
         "full_char": full,
-        "matrix_char": M
+        "matrix": M
     }
