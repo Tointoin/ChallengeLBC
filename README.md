@@ -57,5 +57,5 @@ Tests files of maps are in `tests` folder with name `{myTestName}_test`. Corresp
 To check that every that every test leads to the right result:
 
 ```
-python test.py
+python tests.py
 ```
