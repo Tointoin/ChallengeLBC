@@ -66,25 +66,45 @@ def _find_square(map_info):
                     if _has_obstacle(m):
                         continue
                     else:
-                        print(f"({x},{y}) max_size = {max_size} ; size =  = {size} ; s = {s}")
                         size = s
                         x_square = x
                         y_square = y
                         break
             else:
                 continue
-    return x_square, y_square, size
+    return {
+        "x":x_square,
+        "y":y_square,
+        "size":size
+    }
 
 
-def print_map_with_square(map, x, y, size):
-    pass
+def get_map_with_square(map_info, square):
+    """
+    build string of the map with its top left
+    bigger square without obstacle full
+    """
+    map_string = ""
+    x_indices = list(range(square["x"], square["x"] + square["size"]))
+    y_indices = list(range(square["y"], square["y"] + square["size"]))
+    M = map_info["matrix"]
+    for y in range(map_info["line_num"]):
+        if map_string:
+            map_string += '\n'
+        for x in range(map_info["line_len"]):
+            if M[y][x]:
+                map_string += map_info["obstacle_char"]
+            elif x in x_indices and y in y_indices:
+                map_string += map_info["full_char"]
+            else:
+                map_string += map_info["empty_char"]
+    return map_string
 
 
 if __name__ == '__main__':
-    # if len(sys.argv) < 2:
-    #     print('Missing file path.')
-    #     exit()
-    map = parse_map("./map_file")
-    x, y, size = _find_square(map)
-    print(x, y, size)
-    # print_map_with_square(map, x, y, size)
+    if len(sys.argv) < 2:
+        print('Missing file path.')
+        exit()
+    map_info = parse_map(sys.argv[1])
+    square = _find_square(map_info)
+    print(get_map_with_square(map_info, square))
