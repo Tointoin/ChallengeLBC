@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+import sys
+
 
 class MapError(Exception):
     pass
@@ -93,6 +95,7 @@ def parse_map(path):
     f = open(path, "r")
     f, line_num, empty, obstacle, full = _parse_first_line(f)
     M, line_len = _parse_matrix(line_num, empty, obstacle, f)
+    f.close()
     return {
         "line_len": line_len,
         "line_num": line_num,
@@ -101,3 +104,10 @@ def parse_map(path):
         "full_char": full,
         "matrix": M
     }
+
+
+if __name__ == '__main__':
+    if len(sys.argv) < 2:
+        print('Missing file path.')
+        exit()
+    print(parse_map(sys.argv[1]))
